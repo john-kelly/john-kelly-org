@@ -1,5 +1,5 @@
 {
-  "name": "john-kelly-me",
+  "name": "john-kelly-org",
   "version": "1.0.0",
   "description": "My Personal Website",
   "main": "server.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/john-kelly/john-kelly-me.git"
+    "url": "git+https://github.com/john-kelly/john-kelly-org.git"
   },
   "author": "John Kelly",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/john-kelly/john-kelly-me/issues"
+    "url": "https://github.com/john-kelly/john-kelly-org/issues"
   },
-  "homepage": "https://github.com/john-kelly/john-kelly-me#readme",
+  "homepage": "https://github.com/john-kelly/john-kelly-org#readme",
   "devDependencies": {
     "babel": "^5.8.12",
     "gulp": "^3.9.0",
