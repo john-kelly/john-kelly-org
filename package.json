@@ -1,0 +1,27 @@
+{
+  "name": "john-kelly-me",
+  "version": "1.0.0",
+  "description": "My Personal Website",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/john-kelly/john-kelly-me.git"
+  },
+  "author": "John Kelly",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/john-kelly/john-kelly-me/issues"
+  },
+  "homepage": "https://github.com/john-kelly/john-kelly-me#readme",
+  "devDependencies": {
+    "babel": "^5.8.12",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "require-dir": "^0.3.0"
+  }
+}
