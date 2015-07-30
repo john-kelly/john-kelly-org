@@ -1,3 +1,5 @@
+// NOTE Disable b/c we do not have access to es6 in this file.
+/*eslint-disable*/
 /*
   gulpfile.js
   ===========
