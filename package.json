@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src"
+    "start": "node ./src",
+    "jasmine": "node ./node_modules/.bin/jasmine",
+    "gulp-default": "node ./node_modules/.bin/gulp"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,7 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^5.1.0",
     "gulp-sourcemaps": "^1.5.2",
+    "jasmine": "^2.3.1",
     "require-dir": "^0.3.0"
   }
 }
