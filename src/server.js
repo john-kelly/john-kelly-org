@@ -1,11 +1,14 @@
-let fs = require('fs');
-let http = require('http');
-let url = require('url');
+const fs = require('fs');
+const http = require('http');
 
-let router = require('./router.js');
+const router = require('./router.js');
 
 router.register('/$', (req, res) => {
-    fs.readFile('./src/index.html', function(err, data) {
+    fs.readFile('./src/index.html', (err, data) => {
+        if (err) {
+            // TODO something.
+            return;
+        }
         res.end(data);
     });
 });

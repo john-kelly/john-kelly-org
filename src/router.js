@@ -6,7 +6,7 @@
 
 // TODO support dynamic inputs for routes. ex: '/blog/:id'
 
-let url = require('url');
+const url = require('url');
 
 /**
  * Maintains the inner state of the router module. All registered routes live
@@ -18,7 +18,7 @@ let url = require('url');
  * }
  * @type {Array}
  */
-let routes = [];
+const routes = [];
 
 /**
  * TODO Document
@@ -28,8 +28,8 @@ let routes = [];
  * @param  {[type]} rep [description]
  * @return {[type]}     [description]
  */
-let router = (req, rep) => {
-    let reqPathName = url.parse(req.url).pathname;
+const router = (req, rep) => {
+    const reqPathName = url.parse(req.url).pathname;
     routes.some((route) => {
         if (route.regexPath.test(reqPathName)) {
             route.callback(req, rep);
@@ -47,7 +47,7 @@ let router = (req, rep) => {
 router.register = (path, callback) => {
     routes.push({
         regexPath: new RegExp(path),
-        callback: callback
+        callback: callback,
     });
 };
 
