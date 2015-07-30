@@ -24,9 +24,9 @@ const routes = [];
  * TODO Document
  * Design decision: I made the router a function so that the api was nicer!
  * all of the public api is a method on the router function/object
- * @param  {[type]} req [description]
- * @param  {[type]} rep [description]
- * @return {[type]}     [description]
+ * @param {[type]} req - [description]
+ * @param {[type]} rep - [description]
+ * @return {[type]} - [description]
  */
 const router = (req, rep) => {
     const reqPathName = url.parse(req.url).pathname;
@@ -40,9 +40,9 @@ const router = (req, rep) => {
 
 /**
  * TODO Document
- * @param  {[type]}   path     [description]
- * @param  {Function} callback [description]
- * @return {[type]}            [description]
+ * @param {[type]} path - [description]
+ * @param {Function} callback - [description]
+ * @return {[type]} - [description]
  */
 router.register = (path, callback) => {
     routes.push({

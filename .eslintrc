@@ -23,9 +23,12 @@
     "jsx": true
   },
   "rules": {
+
     "strict": [2, "never"],
+
     "no-var": 2,
     "prefer-const": 2,
+
     "no-shadow": 2,
     "no-shadow-restricted-names": 2,
     "no-unused-vars": [2, {
@@ -33,6 +36,7 @@
       "args": "after-used"
     }],
     "no-use-before-define": 2,
+
     "comma-dangle": [2, "always-multiline"],
     "no-cond-assign": [2, "always"],
     "no-console": 1,
@@ -54,6 +58,8 @@
     "no-unreachable": 2,
     "use-isnan": 2,
     "block-scoped-var": 2,
+
+    "valid-jsdoc": 2,
     "consistent-return": 2,
     "curly": [2, "multi-line"],
     "default-case": 2,
@@ -93,6 +99,7 @@
     "vars-on-top": 2,
     "wrap-iife": [2, "any"],
     "yoda": 2,
+
     "indent": [2, 4, {"indentSwitchCase": true}],
     "brace-style": [2,
       "1tbs", {
