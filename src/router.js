@@ -9,6 +9,8 @@
  * TODO-LIST
  * - support dynamic paths. ex: /blog/:id
  * - suport specific HTTP request methods. ex: GET, POST, etc
+ * - registering multiple callbacks to the same path
+ *     - currently will always just hit the first callback that was registered.
  */
 
 // Node API
