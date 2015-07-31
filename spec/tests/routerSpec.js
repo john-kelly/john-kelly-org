@@ -1,5 +1,5 @@
 describe('router', () => {
-    const router = require('../src/router.js');
+    const router = require('../../src/router.js');
 
     beforeEach(() => {
         router.register('.', () => {});

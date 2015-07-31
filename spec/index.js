@@ -1,12 +1,11 @@
-/**
- * DOCUMENT - what is this doing?
- */
+// NOTE Disable b/c we do not have access to es6 in this file.
+/*eslint-disable*/
 
-/**
- * TODO-LIST
- * - transpile in build proccess instead babel/register.
- */
+// All subsequent files required by node with the extensions .es6, .es, .jsx
+// and .js will be transformed by Babel.
 require('babel/register');
 
-// Tests to run.
-require('./routerSpec');
+var requireDir = require('require-dir');
+
+// Require all tasks in spec/tests, including subfolders
+requireDir('./tests', {recurse: true});
