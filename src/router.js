@@ -10,27 +10,26 @@
  * - support dynamic paths. ex: /blog/:id
  * - suport specific HTTP request methods. ex: GET, POST, etc
  * - registering multiple callbacks to the same path
- *     - currently will always just hit the first callback that was registered.
+ *     - currently will always just hit the last callback that was registered.
  */
 
 // Node API
 const url = require('url');
 
 /**
- * Maintains the inner state of the router module. All registered routes live
- * in this routes array.
+ * Maintains the inner state of the router module. Lastest registered routes
+ * live in this routes object.
  *
- * A route is of the form:
+ * A routes is of the form:
  * {
- *     path: {RegExp},
- *     callback: {Function}
+ *     path: callback
  * }
- * @type {Array}
+ * @type {Object}
  */
-const routes = [];
+const routes = {};
 
 /**
- * This function servers two purposes.
+ * This function serves two purposes.
  * 1.) Contains all public API of this module.
  *  - All public methods and attributes are attached to this function. This
  *    function is the only thing being exported.
@@ -53,9 +52,11 @@ const router = (req, rep) => {
      * return true when you want to break out of the loop and you've got an
      * Array.forEach with break.
      */
-    routes.some((route) => {
-        if (route.regexPath.test(reqPathName)) {
-            route.callback(req, rep);
+    Object.keys(routes).some((path) => {
+        const regexPath = new RegExp(path);
+        if (regexPath.test(reqPathName)) {
+            routes[path](req, rep);
+            // break;
             return true;
         }
     });
@@ -64,17 +65,15 @@ const router = (req, rep) => {
 /**
  * Function to register a new route.
  *
- * @param {String} path - String path to be converted to regex. Corresponds to
- *     a URI endpoint on the server.
+ * @param {String} path - String path, corresponds to a URI endpoint on the
+ *     server. Path is converted to regex and matched on the pathname of req
+ *     when determining callback function to run.
  * @param {Function} callback - Function to call on (req, res) when `path`
  *     endpoint is hit.
  * @return {undefined} - undefined
  */
 router.register = (path, callback) => {
-    routes.push({
-        regexPath: new RegExp(path),
-        callback: callback,
-    });
+    routes[path] = callback;
 };
 
 /**
