@@ -1,5 +1,7 @@
 /**
- * router.js provides a means to respond to client requests to particular
+ * router.js
+ *
+ * provides a means to respond to client requests to particular
  * endpoints, which are URIs (or paths).
  */
 
@@ -26,16 +28,29 @@ const url = require('url');
 const routes = [];
 
 /**
- * TODO Document
- * Design decision: I made the router a function so that the api was nicer!
- * all of the public api is a method on the router function/object
- * @param {[type]} req - [description]
- * @param {[type]} rep - [description]
- * @return {[type]} - [description]
+ * This function servers two purposes.
+ * 1.) Contains all public API of this module.
+ *  - All public methods and attributes are attached to this function. This
+ *    function is the only thing being exported.
+ *
+ * 2.) Acts as the entry point for the module.
+ * - Intended useage for the router is that it is registered as a callback for
+ *   a Node HTTP.Server instance's request event.
+ *
+ * @param {http.ClientRequest} req - Instance of a Node http.ClientRequest.
+ * @param {http.ServerResponse} rep - Instance of a Node http.ServerResponse.
+ * @return {undefined} - undefined
  */
 const router = (req, rep) => {
     const reqPathName = url.parse(req.url).pathname;
-    // NOTE Document this! So cool!
+    /**
+     * This acts like an Array.forEach but with break functionality. The
+     * Array.some method tests whether some of the elements in the array return
+     * true when passed to the callback fn. The method will "break" out of the
+     * loop on the first element that returns true. Simply have the callback fn
+     * return true when you want to break out of the loop and you've got an
+     * Array.forEach with break.
+     */
     routes.some((route) => {
         if (route.regexPath.test(reqPathName)) {
             route.callback(req, rep);
@@ -45,12 +60,14 @@ const router = (req, rep) => {
 };
 
 /**
- * TODO Document
- * @param {String} path - [description]
- * @param {Function} callback - [description]
+ * Function to register a new route.
+ *
+ * @param {String} path - String path to be converted to regex. Corresponds to
+ *     a URI endpoint on the server.
+ * @param {Function} callback - Function to call on (req, res) when `path`
+ *     endpoint is hit.
  * @return {undefined} - undefined
  */
-// NOTE - thoughts on freezing functions? probably unecessary.
 router.register = (path, callback) => {
     routes.push({
         regexPath: new RegExp(path),
@@ -59,9 +76,9 @@ router.register = (path, callback) => {
 };
 
 /**
- * We freeze because:
- * There is no reason for the router to have arbitrary attributes. If an user
- * of this api wants to extend this router in some fashion, they can just wrap
- * it in their own object! compostion vs interhitance!
+ * There is no reason for the router to have arbitrary attributes. If a user of
+ * this api wants to extend this module in some fashion, they can just wrap it
+ * in their own object.
+ * NOTE: Does it make sense to freeze all objects? ex: router.register?
  */
 module.exports = Object.freeze(router);
