@@ -47,6 +47,9 @@ const routes = {};
  * 2.) Acts as the entry point for the module.
  * - Intended useage for the router is that it is registered as a callback for
  *   a Node HTTP.Server instance's request event.
+ * - When the HTTP.Server request event is triggered, this function iterates
+ *     over all of the registered routes, executes the first that it matches on
+ *     and then breaks out.
  *
  * @param {http.ClientRequest} req - Instance of a Node http.ClientRequest.
  * @param {http.ServerResponse} res - Instance of a Node http.ServerResponse.
@@ -86,10 +89,4 @@ router.register = (path, callback) => {
     routes[path] = callback;
 };
 
-/**
- * There is no reason for the router to have arbitrary attributes. If a user of
- * this api wants to extend this module in some fashion, they can just wrap it
- * in their own object.
- * NOTE: Does it make sense to freeze all objects? ex: router.register?
- */
-module.exports = Object.freeze(router);
+module.exports = router;
