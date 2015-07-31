@@ -13,6 +13,16 @@
  *     - currently will always just hit the last callback that was registered.
  */
 
+/**
+* BUGS
+* - Since the order in which we iterate through the paths is not garunteed,
+*     there may be uninteded behavior for extremely general paths. Ex: The
+*     path `.*` which is intended to match on anything would break all other
+*     routes if it were to run first. The intended functionality of such a path
+*     is to act as a default path, maybe this needs to be implemented as an
+*     edge case.
+*/
+
 // Node API
 const url = require('url');
 
@@ -39,10 +49,10 @@ const routes = {};
  *   a Node HTTP.Server instance's request event.
  *
  * @param {http.ClientRequest} req - Instance of a Node http.ClientRequest.
- * @param {http.ServerResponse} rep - Instance of a Node http.ServerResponse.
+ * @param {http.ServerResponse} res - Instance of a Node http.ServerResponse.
  * @return {undefined} - undefined
  */
-const router = (req, rep) => {
+const router = (req, res) => {
     const reqPathName = url.parse(req.url).pathname;
     /**
      * This acts like an Array.forEach but with break functionality. The
@@ -55,7 +65,7 @@ const router = (req, rep) => {
     Object.keys(routes).some((path) => {
         const regexPath = new RegExp(path);
         if (regexPath.test(reqPathName)) {
-            routes[path](req, rep);
+            routes[path](req, res);
             // break;
             return true;
         }
