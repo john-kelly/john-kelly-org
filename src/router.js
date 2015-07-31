@@ -1,19 +1,24 @@
 /**
- * The router module is intended to me used as a singleton. Router objects can
- * not be instantiated. There is only one state, which is the state of the
- * module.
+ * router.js provides a means to respond to client requests to particular
+ * endpoints, which are URIs (or paths).
  */
 
-// TODO support dynamic inputs for routes. ex: '/blog/:id'
+/**
+ * TODO-LIST
+ * - support dynamic paths. ex: /blog/:id
+ * - suport specific HTTP request methods. ex: GET, POST, etc
+ */
 
+// Node API
 const url = require('url');
 
 /**
  * Maintains the inner state of the router module. All registered routes live
  * in this routes array.
- * Route is of the form:
+ *
+ * A route is of the form:
  * {
- *     path: {String},
+ *     path: {RegExp},
  *     callback: {Function}
  * }
  * @type {Array}
@@ -30,6 +35,7 @@ const routes = [];
  */
 const router = (req, rep) => {
     const reqPathName = url.parse(req.url).pathname;
+    // NOTE Document this! So cool!
     routes.some((route) => {
         if (route.regexPath.test(reqPathName)) {
             route.callback(req, rep);
@@ -40,10 +46,11 @@ const router = (req, rep) => {
 
 /**
  * TODO Document
- * @param {[type]} path - [description]
+ * @param {String} path - [description]
  * @param {Function} callback - [description]
- * @return {[type]} - [description]
+ * @return {undefined} - undefined
  */
+// NOTE - thoughts on freezing functions? probably unecessary.
 router.register = (path, callback) => {
     routes.push({
         regexPath: new RegExp(path),
@@ -51,4 +58,10 @@ router.register = (path, callback) => {
     });
 };
 
-module.exports = router;
+/**
+ * We freeze because:
+ * There is no reason for the router to have arbitrary attributes. If an user
+ * of this api wants to extend this router in some fashion, they can just wrap
+ * it in their own object! compostion vs interhitance!
+ */
+module.exports = Object.freeze(router);
