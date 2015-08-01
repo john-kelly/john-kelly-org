@@ -1,0 +1,43 @@
+.color-red {
+    color: #DA3D58;
+}
+
+.color-blue {
+    color: #66C0BF;
+}
+
+.color-orange {
+    color: #DB6156;
+}
+
+.color-brown {
+    color: #726463;
+}
+
+.color-beige {
+    color: #F3E9E1;
+}
+
+.bgcolor-red {
+    background-color: #DA3D58;
+}
+
+.bgcolor-blue {
+    background-color: #66C0BF;
+}
+
+.bgcolor-orange {
+    background-color: #DB6156;
+}
+
+.bgcolor-brown {
+    background-color: #726463;
+}
+
+.bgcolor-beige {
+    background-color: #F3E9E1;
+}
+
+.height-sm {
+    height: 100px;
+}
