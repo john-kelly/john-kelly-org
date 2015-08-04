@@ -1,0 +1,42 @@
+/*Page Layout Component*/
+.page-layout,
+.page-layout__body {
+    display: flex;
+    flex-direction: column;
+
+    /*Grow horizontally or vertically to fill page.*/
+    flex-grow: 1;
+}
+
+.page-layout__content {
+    /*Grow horizontally or vertically to fill page.*/
+    flex-grow: 1;
+}
+
+.page-layout__left-or-top {
+    /* Orders this elem to the left|up one unit. This is to allow the
+    `page-layout__content` elem to be the first elem in the html. */
+    order: -1;
+}
+
+.page-layout__left-or-top,
+.page-layout__right-or-bot {
+    display: flex;
+    flex-direction: row;
+}
+
+/*This runs if the width is >=900*/
+@media (min-width: 900px) {
+    .page-layout__body {
+        flex-direction: row;
+        flex-grow: 1;
+    }
+
+    .page-layout__left-or-top,
+    .page-layout__right-or-bot {
+        flex-direction: column;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 10em;
+    }
+}
