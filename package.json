@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/babel-node ./src",
     "jasmine": "node ./node_modules/.bin/jasmine",
-    "gulp-default": "node ./node_modules/.bin/gulp"
+    "local": "node ./node_modules/.bin/gulp",
+    "deploy": "node ./node_modules/.bin/gulp deploy"
   },
   "repository": {
     "type": "git",
@@ -20,13 +21,16 @@
   },
   "homepage": "https://github.com/john-kelly/john-kelly-org#readme",
   "devDependencies": {
-    "babel": "^5.8.12",
     "babel-eslint": "^4.0.5",
+    "del": "^1.2.0",
     "eslint": "^0.24.1",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.1.0",
     "gulp-sourcemaps": "^1.5.2",
     "jasmine": "^2.3.1",
     "require-dir": "^0.3.0"
+  },
+  "dependencies": {
+    "babel": "^5.8.20"
   }
 }
