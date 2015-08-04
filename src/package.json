@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Website.",
   "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
   "dependencies": {
     "babel": "^5.8.12"
   },

@@ -1,13 +1,14 @@
 // Node API
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 
 // Personal API
 const router = require('./router.js');
 
 // Html Routes
 router.register('/$', (req, res) => {
-    fs.readFile('./src/index.html', (err, data) => {
+    fs.readFile(path.join(__dirname, '/index.html'), (err, data) => {
         if (err) {
             res.end('500');
         }
@@ -17,7 +18,7 @@ router.register('/$', (req, res) => {
 
 // Stylesheet Routes
 router.register('/main.css$', (req, res) => {
-    fs.readFile('./src/main.css', (err, data) => {
+    fs.readFile(path.join(__dirname, '/main.css'), (err, data) => {
         if (err) {
             res.end('500');
         }
@@ -25,7 +26,7 @@ router.register('/main.css$', (req, res) => {
     });
 });
 router.register('/normalize.css$', (req, res) => {
-    fs.readFile('./src/normalize.css', (err, data) => {
+    fs.readFile(path.join(__dirname, '/normalize.css'), (err, data) => {
         if (err) {
             res.end('500');
         }
@@ -33,7 +34,7 @@ router.register('/normalize.css$', (req, res) => {
     });
 });
 router.register('/page-layout.css$', (req, res) => {
-    fs.readFile('./src/page-layout.css', (err, data) => {
+    fs.readFile(path.join(__dirname, '/page-layout.css'), (err, data) => {
         if (err) {
             res.end('500');
         }
