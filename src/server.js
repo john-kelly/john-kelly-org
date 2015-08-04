@@ -50,4 +50,4 @@ router.register('.', (req, res) => {
     res.end('404');
 });
 
-http.createServer(router).listen(8080, 'localhost');
+http.createServer(router).listen(process.env.PORT || 8080, 'localhost');
