@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src",
+    "start": "./node_modules/.bin/babel-node ./src",
     "jasmine": "node ./node_modules/.bin/jasmine",
     "gulp-default": "node ./node_modules/.bin/gulp"
   },
