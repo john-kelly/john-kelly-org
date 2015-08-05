@@ -30,6 +30,7 @@
     "require-dir": "^0.3.0"
   },
   "dependencies": {
-    "babel": "^5.8.20"
+    "babel": "^5.8.20",
+    "pg": "^4.4.1"
   }
 }
