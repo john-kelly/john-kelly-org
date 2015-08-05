@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/babel-node ./src",
     "jasmine": "node ./node_modules/.bin/jasmine",
-    "local": "node ./node_modules/.bin/gulp",
-    "deploy": "node ./node_modules/.bin/gulp deploy"
+    "build": "node ./node_modules/.bin/gulp build"
   },
   "repository": {
     "type": "git",
