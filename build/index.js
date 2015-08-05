@@ -70,6 +70,16 @@ router.register('/db$', (req, res) => {
     });
 });
 
+// Favicon Route
+router.register('/favicon.ico$', (req, res) => {
+    fs.readFile(path.join(__dirname, '/favicon.ico'), (err, data) => {
+        if (err) {
+            res.end('500');
+        }
+        res.end(data);
+    });
+});
+
 // Default Route
 // FIXME
 // As it currently stands, the order in which a route is tested is not
