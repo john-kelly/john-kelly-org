@@ -81,11 +81,6 @@ router.register('/favicon.ico$', (req, res) => {
 });
 
 // Default Route
-// FIXME
-// As it currently stands, the order in which a route is tested is not
-// garunteed, therefore, this could theoretically run first, which is not what
-// we want. Default routes should be implemented as an edgecase OR there needs
-// to be a mechanism to determine route priority.
 router.register('.', (req, res) => {
     res.end('404');
 });
