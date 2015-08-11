@@ -7,6 +7,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
 const util = require('util');
 
 // 3rd Party
@@ -18,7 +19,7 @@ const router = require('./router.js');
 
 // Html Routes
 router.register('/$', (req, res) => {
-    fs.readFile(path.join(__dirname, '/index.html'), (err, data) => {
+    fs.readFile(path.join(__dirname, '/static/index.html'), (err, data) => {
         if (err) {
             res.end('500');
         }
@@ -26,25 +27,15 @@ router.register('/$', (req, res) => {
     });
 });
 
-// Stylesheet Routes
-router.register('/main.css$', (req, res) => {
-    fs.readFile(path.join(__dirname, '/main.css'), (err, data) => {
-        if (err) {
-            res.end('500');
-        }
-        res.end(data);
-    });
-});
-router.register('/normalize.css$', (req, res) => {
-    fs.readFile(path.join(__dirname, '/normalize.css'), (err, data) => {
-        if (err) {
-            res.end('500');
-        }
-        res.end(data);
-    });
-});
-router.register('/page-layout.css$', (req, res) => {
-    fs.readFile(path.join(__dirname, '/page-layout.css'), (err, data) => {
+// Static File Route
+// TODO I am not sure if this makes the server vulnerable to relative path
+// traversal... It appears on first attempts that urls like /static/../index.js
+// actually just convert to /index.js. The "."s are not being preserved as "."
+// literals, they are being interpreted as relative paths prior to hitting the
+// server. I think we are safe.
+router.register('/static/.+$', (req, res) => {
+    const reqPathName = url.parse(req.url).pathname;
+    fs.readFile(path.join(__dirname, reqPathName), (err, data) => {
         if (err) {
             res.end('500');
         }
@@ -67,16 +58,6 @@ router.register('/db$', (req, res) => {
                 }
             });
         }
-    });
-});
-
-// Favicon Route
-router.register('/favicon.ico$', (req, res) => {
-    fs.readFile(path.join(__dirname, '/favicon.ico'), (err, data) => {
-        if (err) {
-            res.end('500');
-        }
-        res.end(data);
     });
 });
 

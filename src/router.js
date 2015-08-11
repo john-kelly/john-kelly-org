@@ -15,7 +15,8 @@
 
 /**
 * KNOWN-BUGS
-* - NONE
+* - Potential non-intuitive silent errors could occur if user of module
+*     registers multiple routes for the same regex.
 */
 
 // Node API
