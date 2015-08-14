@@ -13,31 +13,3 @@ html,
 body {
     height: 100%;
 }
-
-/*Branding Colors*/
-.bgcolor-light-red {
-    background-color: #F17F64;
-}
-
-.bgcolor-dark-red {
-    background-color: #D95241;
-}
-
-.bgcolor-light-blue {
-    background-color: #88BAD8;
-}
-
-.bgcolor-dark-blue {
-    background-color: #4D7CA7;
-}
-
-/*Grey Scale Colors*/
-.bgcolor-light-grey {
-    background-color: #F4F3F0;
-}
-.bgcolor-grey {
-    background-color: #B6AFA9;
-}
-.bgcolor-dark-grey {
-    background-color: #756E71;
-}
