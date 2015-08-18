@@ -8,35 +8,33 @@
 /**
  * TODO-LIST
  * - support dynamic paths. ex: /blog/:id
- * - suport specific HTTP request methods. ex: GET, POST, etc
+ * - more support for specific HTTP request methods. ex: GET, POST, etc
  * - registering multiple callbacks to the same path
- *     - currently will always just hit the last callback that was registered.
+ *     - currently will always just hit the first callback that was registered.
  */
 
 /**
-* BUGS
-* - Since the order in which we iterate through the paths is not garunteed,
-*     there may be uninteded behavior for extremely general paths. Ex: The
-*     path `.*` which is intended to match on anything would break all other
-*     routes if it were to run first. The intended functionality of such a path
-*     is to act as a default path, maybe this needs to be implemented as an
-*     edge case.
+* KNOWN-BUGS
+* - Potential non-intuitive silent errors could occur if user of module
+*     registers multiple routes for the same regex.
 */
 
 // Node API
+const http = require('http');
 const url = require('url');
 
 /**
- * Maintains the inner state of the router module. Lastest registered routes
- * live in this routes object.
+ * Maintains the inner state of the router module.
  *
- * A routes is of the form:
+ * A route is of the form:
  * {
- *     path: callback
+ *     method: {String},
+ *     path: {String},
+ *     callback: {Function}
  * }
- * @type {Object}
+ * @type {Array}
  */
-const routes = {};
+const routes = [];
 
 /**
  * This function serves two purposes.
@@ -48,7 +46,7 @@ const routes = {};
  * - Intended useage for the router is that it is registered as a callback for
  *   a Node HTTP.Server instance's request event.
  * - When the HTTP.Server request event is triggered, this function iterates
- *     over all of the registered routes, executes the first that it matches on
+ *     over all of the registered routes, executes the FIRST that it matches on
  *     and then breaks out.
  *
  * @param {http.ClientRequest} req - Instance of a Node http.ClientRequest.
@@ -65,15 +63,23 @@ const router = (req, res) => {
      * return true when you want to break out of the loop and you've got an
      * Array.forEach with break.
      */
-    Object.keys(routes).some((path) => {
-        const regexPath = new RegExp(path);
-        if (regexPath.test(reqPathName)) {
-            routes[path](req, res);
+    routes.some((route) => {
+        const regexPath = new RegExp(route.path);
+        if (regexPath.test(reqPathName) && route.method === req.method) {
+            route.callback(req, res);
             // break;
             return true;
         }
     });
 };
+
+/**
+ * HTTP method constants converted to an object for O(1) lookup.
+ */
+router.METHODS = http.METHODS.reduce((methods, method) => {
+    methods[method] = method;
+    return methods;
+}, {});
 
 /**
  * Function to register a new route.
@@ -85,8 +91,12 @@ const router = (req, res) => {
  *     endpoint is hit.
  * @return {undefined} - undefined
  */
-router.register = (path, callback) => {
-    routes[path] = callback;
+router.register = (path, callback, method=router.METHODS.GET) => {
+    routes.push({
+        path,
+        callback,
+        method,
+    });
 };
 
 module.exports = router;

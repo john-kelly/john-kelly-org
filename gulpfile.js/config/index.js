@@ -2,7 +2,7 @@ const config = {};
 
 config.buildDirectory = './build';
 config.sourceDirectory = './src';
-config.sourceFiles = './src/*';
+config.sourceFiles = './src/**';
 
 config.appJson = './app.json';
 config.packageJson = './package.json';
