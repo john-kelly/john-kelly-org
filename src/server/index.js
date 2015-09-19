@@ -19,7 +19,7 @@ const router = require('./router.js');
 
 // Html Routes
 router.register('/$', (req, res) => {
-    fs.readFile(path.join(__dirname, '/static/index.html'), (err, data) => {
+    fs.readFile(path.join(__dirname, '../static/index.html'), (err, data) => {
         if (err) {
             res.end('500');
         }
@@ -35,7 +35,7 @@ router.register('/$', (req, res) => {
 // server. I think we are safe.
 router.register('/static/.+$', (req, res) => {
     const reqPathName = url.parse(req.url).pathname;
-    fs.readFile(path.join(__dirname, reqPathName), (err, data) => {
+    fs.readFile(path.join(__dirname, '..', reqPathName), (err, data) => {
         if (err) {
             res.end('500');
         }

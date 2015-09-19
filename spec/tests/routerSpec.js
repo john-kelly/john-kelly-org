@@ -1,6 +1,6 @@
 const http = require('http');
 
-const router = require('../../src/router.js');
+const router = require('../../src/server/router.js');
 
 // `describe` defines a test suite.
 describe('a router', () => {
