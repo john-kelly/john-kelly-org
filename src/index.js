@@ -44,7 +44,7 @@ router.register('/static/.+$', (req, res) => {
 });
 
 // Db Test Route
-router.register('/db$', (req, res) => {
+router.register('/api$', (req, res) => {
     pg.connect(process.env.DATABASE_URL || localDbUrl, (err1, client, done) => {
         if (err1) {
             res.end(util.format('%j', err1));

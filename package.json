@@ -4,10 +4,9 @@
   "description": "My Personal Website",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/babel-node ./src",
-    "jasmine": "node ./node_modules/.bin/jasmine",
-    "build": "node ./node_modules/.bin/gulp build"
+    "test": "jasmine",
+    "start": "babel-node src",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
