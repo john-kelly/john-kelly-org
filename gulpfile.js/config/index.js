@@ -1,6 +1,6 @@
 const config = {};
 
-config.buildDirectory = './build';
+config.buildDirectory = './dist';
 config.sourceDirectory = './src';
 config.sourceFiles = './src/**';
 
