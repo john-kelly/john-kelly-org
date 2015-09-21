@@ -1,6 +1,6 @@
 @font-face {
-  font-family: Pokemon;
-  src: url(pokemon-gb.ttf);
+    font-family: Pokemon;
+    src: url(../fonts/pokemon-gb.ttf);
 }
 
 .font-family-pokemon {
