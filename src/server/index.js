@@ -12,7 +12,6 @@ const util = require('util');
 
 // 3rd Party
 const pg = require('pg');
-const marked = require('marked');
 
 // Personal API
 const {localDbUrl} = require('./config.js');
@@ -41,18 +40,6 @@ router.register('/static/.+$', (req, res) => {
             res.end('500');
         }
         res.end(data);
-    });
-});
-
-// Test Route for post markdown.
-router.register('/posts/.+$', (req, res) => {
-    res.setHeader('Content-Type', 'text/html');
-    const reqPathName = url.parse(req.url).pathname;
-    fs.readFile(path.join(__dirname, '../static', reqPathName), (err, data) => {
-        if (err) {
-            res.end('500');
-        }
-        res.end(marked(data.toString()));
     });
 });
 
