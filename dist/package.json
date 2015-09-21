@@ -2,12 +2,11 @@
   "name": "john-kelly-org",
   "version": "1.0.0",
   "description": "My Personal Website",
-  "main": "server.js",
+  "main": "src/server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/babel-node ./src",
-    "jasmine": "node ./node_modules/.bin/jasmine",
-    "build": "node ./node_modules/.bin/gulp build"
+    "test": "jasmine",
+    "start": "babel-node src/server",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -25,6 +24,7 @@
     "eslint": "^0.24.1",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.1.0",
+    "gulp-elm": "^0.2.0",
     "gulp-sourcemaps": "^1.5.2",
     "jasmine": "^2.3.1",
     "require-dir": "^0.3.0"

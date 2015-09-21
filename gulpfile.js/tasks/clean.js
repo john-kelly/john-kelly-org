@@ -1,10 +1,8 @@
 const gulp = require('gulp');
 const del = require('del');
 
-const {buildDirectory} = require('../config');
+const {dist} = require('../config').clean;
 
 gulp.task('clean', (cb) => {
-    del([
-        buildDirectory,
-    ], cb);
+    del([dist], cb);
 });

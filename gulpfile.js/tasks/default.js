@@ -1,4 +1,4 @@
 const gulp = require('gulp');
 
 // TODO 'babel' task
-gulp.task('default', ['build']);
+gulp.task('default', ['copy', 'elm']);
