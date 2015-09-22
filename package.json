@@ -5,7 +5,7 @@
   "main": "src/server/index.js",
   "scripts": {
     "test": "jasmine",
-    "start": "gulp --dev; babel-node dist/server",
+    "start": "gulp --dev; babel-node dev/server",
     "build": "gulp"
   },
   "repository": {
