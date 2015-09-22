@@ -17,9 +17,9 @@ const pg = require('pg');
 const {localDbUrl} = require('./config.js');
 const router = require('./router.js');
 
-// Html Routes
+// Index Route
 router.register('/$', (req, res) => {
-    fs.readFile(path.join(__dirname, '../index-elm.html'), (err, data) => {
+    fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
         if (err) {
             res.end('500');
         }
@@ -33,6 +33,7 @@ router.register('/$', (req, res) => {
 // actually just convert to /index.js. The "."s are not being preserved as "."
 // literals, they are being interpreted as relative paths prior to hitting the
 // server. I think we are safe.
+// TODO Host static on static server
 router.register('/static/.+$', (req, res) => {
     const reqPathName = url.parse(req.url).pathname;
     fs.readFile(path.join(__dirname, '..', reqPathName), (err, data) => {

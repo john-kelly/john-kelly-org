@@ -1,41 +1,19 @@
 /* apply a natural box layout model to all elements, but allowing components to change
 http://www.paulirish.com/2012/box-sizing-border-box-ftw */
 html {
-  box-sizing: border-box;
-  font-family: 'Ubuntu';
-  font-weight: 300;
-  line-height: 1.5;
+    box-sizing: border-box;
 }
 *, *:before, *:after {
-  box-sizing: inherit;
+    box-sizing: inherit;
 }
 
-/* TODO What are people's thoughts on this? */
 html,
 body {
     height: 100%;
 }
 
-.underline {
-    text-decoration: underline;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.padding-sm {
-    padding: 15px;
-}
-
-.padding-md {
-    padding: 30px;
-}
-
-.padding-lg {
-    padding: 45px;
-}
-
-.padding-xl {
-    padding: 60px;
+html {
+    font-family: 'Ubuntu';
+    font-weight: 300;
+    line-height: 1.5;
 }

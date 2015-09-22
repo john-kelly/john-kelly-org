@@ -19,7 +19,7 @@ const router = require('./router.js');
 
 // Html Routes
 router.register('/$', (req, res) => {
-    fs.readFile(path.join(__dirname, '../index-elm.html'), (err, data) => {
+    fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
         if (err) {
             res.end('500');
         }
