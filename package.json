@@ -5,7 +5,7 @@
   "main": "src/server/index.js",
   "scripts": {
     "test": "jasmine",
-    "start": "gulp; babel-node dist/server",
+    "start": "gulp --dev; babel-node dist/server",
     "build": "gulp"
   },
   "repository": {
@@ -27,7 +27,8 @@
     "gulp-elm": "^0.2.0",
     "gulp-sourcemaps": "^1.5.2",
     "jasmine": "^2.3.1",
-    "require-dir": "^0.3.0"
+    "require-dir": "^0.3.0",
+    "yargs": "^3.25.0"
   },
   "dependencies": {
     "babel": "^5.8.20",

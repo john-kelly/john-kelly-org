@@ -1,11 +1,14 @@
 const path = require('path');
 
+const argv = require('yargs').argv;
+
 const config = {};
 
-const dist = 'dist';
+// So we don't have to track changes during development.
+const dest = argv.dev ? 'dev' : 'dist';
 
 config.clean = {
-    dist: dist,
+    dest: dest,
 };
 
 config.copy = {
@@ -14,12 +17,12 @@ config.copy = {
         '!src/static/scripts/elm/**/', '!src/static/scripts/elm/', // .elm are built w/ elm.js
         './app.json', './package.json', './Procfile', // Add files for heroku
     ],
-    dest: dist,
+    dest: dest,
 };
 
 config.elm = {
     globs: ['src/static/scripts/elm/**'],
-    dest: path.join(dist, '/static/scripts/elm/'),
+    dest: path.join(dest, '/static/scripts/elm/'),
 };
 
 module.exports = config;
