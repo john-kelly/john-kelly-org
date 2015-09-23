@@ -32,6 +32,9 @@ main =
   Graphics.Element.show (toUppercase "Hello, Universe!")
 ```
 
+#### Challenges
+http://elm-lang.org/examples/binary-tree
+
 
 ## TODO
 - embed the editor in blog or site or something.
