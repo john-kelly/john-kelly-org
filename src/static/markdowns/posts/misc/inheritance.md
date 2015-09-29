@@ -65,6 +65,7 @@ some fashion, however I have yet to see find any use case)
     - crock http://www.crockford.com/javascript/inheritance.html
     - crock https://gist.github.com/coolaj86/364168
     - crock http://weblogs.asp.net/bleroy/crockford%E2%80%99s-2014-object-creation-pattern / http://bdadam.com/blog/video-douglas-crockford-about-the-new-good-parts.html
+    - rando https://github.com/Olical/Heir/blob/master/heir.js
 ```javascript  f
 function your_constructor(spec) {
     let {member1, member2, memberN = spec;
