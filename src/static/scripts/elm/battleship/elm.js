@@ -355,7 +355,7 @@ Elm.Battleship.make = function (_elm) {
             case "Safe":
             return $Basics.toString(gridCell._0);}
          _U.badCase($moduleName,
-         "between lines 324 and 328");
+         "between lines 323 and 327");
       }();
    };
    var primaryGridToString = function (grid) {
@@ -394,7 +394,7 @@ Elm.Battleship.make = function (_elm) {
                               _L.fromArray([]),
                               _L.fromArray([$Html.text(trackingGridToString(player.grid))]))]));}
             _U.badCase($moduleName,
-            "between lines 448 and 458");
+            "between lines 447 and 457");
          }();
       }();
    });
@@ -416,7 +416,7 @@ Elm.Battleship.make = function (_elm) {
               })(_L.range(0,
               ship.length - 1));}
          _U.badCase($moduleName,
-         "between lines 314 and 320");
+         "between lines 313 and 319");
       }();
    };
    var canAddShip = F2(function (ship,
@@ -720,7 +720,7 @@ Elm.Battleship.make = function (_elm) {
                                                                     player.ships)]],
                                                        player)]
                                                       ,["state"
-                                                       ,allButOneShipAdded(player.ships) ? SetupPlayer2 : model.state]],
+                                                       ,allButOneShipAdded(player.ships) && $Basics.fst(addShipResult) ? SetupPlayer2 : model.state]],
                                     model);
                                  }();}
                             return model;
@@ -787,7 +787,7 @@ Elm.Battleship.make = function (_elm) {
                          model);
                       }();}
                  _U.badCase($moduleName,
-                 "between lines 117 and 183");
+                 "between lines 118 and 183");
               }();
             case "SetupPlayer2":
             return function () {
@@ -820,7 +820,7 @@ Elm.Battleship.make = function (_elm) {
                                                                     player.ships)]],
                                                        player)]
                                                       ,["state"
-                                                       ,allButOneShipAdded(player.ships) ? PlayPlayer1 : model.state]],
+                                                       ,allButOneShipAdded(player.ships) && $Basics.fst(addShipResult) ? PlayPlayer1 : model.state]],
                                     model);
                                  }();}
                             return model;
@@ -887,7 +887,7 @@ Elm.Battleship.make = function (_elm) {
                          model);
                       }();}
                  _U.badCase($moduleName,
-                 "between lines 184 and 250");
+                 "between lines 184 and 249");
               }();}
          return function () {
             return model;
@@ -1109,7 +1109,7 @@ Elm.Battleship.make = function (_elm) {
                            model.player2,
                            model)]));}
          _U.badCase($moduleName,
-         "between lines 409 and 437");
+         "between lines 408 and 436");
       }();
    });
    var main = A2($Signal.map,
