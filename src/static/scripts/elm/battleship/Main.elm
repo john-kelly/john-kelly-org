@@ -1,17 +1,20 @@
 module Battleship where
 
 -- NOTE
+
+-- TODO
+-- Add PlayerTurn Type? Benefit is the ability to move player specific stuff to its own functions
+-- How to check for change in state? Do we check at the end of each action or do we check at the beginning of each action??? Is there a better way?
+-- what is the right way to find a ship by id? is what the todo mvc does best practice? a filter on id?Options
+    -- speaking of id. i rem in the tutorial there was some talk about optimizations b/c of id. must be called id?
+-- should probably have two different boards... this way a player does not have to have the opponents board to generate their track......... damn!
+-- checking for hits should use getCoordinates instead of iterating over the entire matrix. similar to `canAddShip`
+
 -----------------------------------
 -- Premature fucking optmization --
 -----------------------------------
 -- We could store the state of the board separate from the ships. We really
 -- only need the ships to draw.
-
------------------------------------
--- State Machines for the win??? --
------------------------------------
--- We may want to create a more explicit state machine?
--- type State = Player1Turn | Player2Turn
 
 -- REFERENCE
 -- Terminology from: https://en.wikipedia.org/wiki/Battleship_(game)#Description
@@ -21,21 +24,18 @@ import Array
 import Html
 import Html.Attributes
 import Html.Events
-import Json.Decode
 import Matrix as M
-import Maybe exposing (Maybe)
 import String
 import Signal
 
 ---- MODEL ----
 -- Ship --
 type Orientation = Horizontal | Vertical | NotSet
-type alias ShipId = Int
 type alias Ship =
-    { shipId : ShipId
+    { id : Int
     , length : Int
     , orientation : Orientation
-    , headCoord : M.Location
+    , location : M.Location
     , isAdded : Bool
     }
 defaultShips : List Ship
@@ -48,8 +48,8 @@ defaultShips =
 type GridCell
     = Miss
     | Empty
-    | Hit ShipId
-    | Safe ShipId
+    | Hit Int
+    | Safe Int
 -- Grid --
 type GridType = TrackingGrid | PrimaryGrid
 type alias Grid = M.Matrix GridCell
@@ -101,10 +101,10 @@ game numRows numCols =
 -- some alternatives: http://elm-lang.org/learn/Architecture.elm
 type Action
     = NoOp
-    | SetupShipRow ShipId String
-    | SetupShipColumn ShipId String
-    | SetupShipOrientation ShipId String
-    | AddShip ShipId
+    | SetupShipRow Int String
+    | SetupShipColumn Int String
+    | SetupShipOrientation Int String
+    | AddShip Int
     | SetupShootRow String
     | SetupShootColumn String
     | Shoot
@@ -116,12 +116,12 @@ update action model =
         SetupPlayer1 ->
             case action of
                 NoOp -> model
-                SetupShipRow shipId rowAsString ->
+                SetupShipRow id rowAsString ->
                     let
                     updateShip s =
-                        if s.shipId == shipId then
+                        if s.id == id then
                             {
-                             s | headCoord <- (M.location (toIntOrDefaultOrZero rowAsString (M.row s.headCoord)) (M.col s.headCoord))
+                             s | location <- (M.location (toIntOrDefaultOrZero rowAsString (M.row s.location)) (M.col s.location))
                             }
 
                         else s
@@ -132,12 +132,12 @@ update action model =
                             List.map updateShip model.player1.ships
                         }
                     }
-                SetupShipColumn shipId colAsString ->
+                SetupShipColumn id colAsString ->
                     let
                     updateShip s =
-                        if s.shipId == shipId then
+                        if s.id == id then
                             {
-                             s | headCoord <- (M.location (M.row s.headCoord) (toIntOrDefaultOrZero colAsString (M.col s.headCoord)))
+                             s | location <- (M.location (M.row s.location) (toIntOrDefaultOrZero colAsString (M.col s.location)))
                             }
 
                         else s
@@ -148,10 +148,10 @@ update action model =
                             List.map updateShip model.player1.ships
                         }
                     }
-                SetupShipOrientation shipId orientAsString ->
+                SetupShipOrientation id orientAsString ->
                     let
                     updateShip s =
-                        if s.shipId == shipId then
+                        if s.id == id then
                             {
                              s | orientation <- orientationFromStringOrDefault orientAsString s.orientation
                             }
@@ -164,9 +164,9 @@ update action model =
                             List.map updateShip model.player1.ships
                         }
                     }
-                AddShip shipId ->
+                AddShip id ->
                     let
-                        ship = Array.get shipId (Array.fromList model.player1.ships)
+                        ship = Array.get id (Array.fromList model.player1.ships)
                         player = model.player1
                         grid = model.player1.grid
                     in
@@ -180,7 +180,7 @@ update action model =
                                             { player |
                                                 grid <- snd addShipResult,
                                                 -- I hate everything.
-                                                ships <- (List.map (\ aShip -> if aShip.shipId == shipId then {aShip | isAdded <- fst addShipResult} else aShip) player.ships)
+                                                ships <- (List.map (\ aShip -> if aShip.id == id then {aShip | isAdded <- fst addShipResult} else aShip) player.ships)
                                             },
                                         -- TODO this logic belongs at the TOP of the state!!!
                                         state <- if allButOneShipAdded player.ships then SetupPlayer2 else model.state
@@ -189,12 +189,12 @@ update action model =
         SetupPlayer2 ->
             case action of
                 NoOp -> model
-                SetupShipRow shipId rowAsString ->
+                SetupShipRow id rowAsString ->
                     let
                     updateShip s =
-                        if s.shipId == shipId then
+                        if s.id == id then
                             {
-                             s | headCoord <- (M.location (toIntOrDefaultOrZero rowAsString (M.row s.headCoord)) (M.col s.headCoord))
+                             s | location <- (M.location (toIntOrDefaultOrZero rowAsString (M.row s.location)) (M.col s.location))
                             }
 
                         else s
@@ -205,12 +205,12 @@ update action model =
                             List.map updateShip model.player2.ships
                         }
                     }
-                SetupShipColumn shipId colAsString ->
+                SetupShipColumn id colAsString ->
                     let
                     updateShip s =
-                        if s.shipId == shipId then
+                        if s.id == id then
                             {
-                             s | headCoord <- (M.location (M.row s.headCoord) (toIntOrDefaultOrZero colAsString (M.col s.headCoord)))
+                             s | location <- (M.location (M.row s.location) (toIntOrDefaultOrZero colAsString (M.col s.location)))
                             }
 
                         else s
@@ -221,10 +221,10 @@ update action model =
                             List.map updateShip model.player2.ships
                         }
                     }
-                SetupShipOrientation shipId orientAsString ->
+                SetupShipOrientation id orientAsString ->
                     let
                     updateShip s =
-                        if s.shipId == shipId then
+                        if s.id == id then
                             {
                              s | orientation <- orientationFromStringOrDefault orientAsString s.orientation
                             }
@@ -237,9 +237,9 @@ update action model =
                             List.map updateShip model.player2.ships
                         }
                     }
-                AddShip shipId ->
+                AddShip id ->
                     let
-                        ship = Array.get shipId (Array.fromList model.player2.ships)
+                        ship = Array.get id (Array.fromList model.player2.ships)
                         player = model.player2
                         grid = model.player2.grid
                     in
@@ -253,7 +253,7 @@ update action model =
                                             { player |
                                                 grid <- snd addShipResult,
                                                 -- I hate everything.
-                                                ships <- (List.map (\ aShip -> if aShip.shipId == shipId then {aShip | isAdded <- fst addShipResult} else aShip) player.ships)
+                                                ships <- (List.map (\ aShip -> if aShip.id == id then {aShip | isAdded <- fst addShipResult} else aShip) player.ships)
                                             },
                                         -- TODO this logic belongs at the TOP of the state!!!
                                         state <- if allButOneShipAdded player.ships then PlayPlayer1 else model.state
@@ -342,18 +342,18 @@ getShipCoordinates ship =
     case ship.orientation of
         Vertical ->
             [0 .. ship.length - 1]
-                |> List.map (\num -> M.location ((M.row ship.headCoord) + num) (M.col ship.headCoord))
+                |> List.map (\num -> M.location ((M.row ship.location) + num) (M.col ship.location))
         Horizontal ->
             [0 .. ship.length - 1]
-                |> List.map (\num -> M.location (M.row ship.headCoord) ((M.col ship.headCoord) + num))
+                |> List.map (\num -> M.location (M.row ship.location) ((M.col ship.location) + num))
 
 primaryGridCellToString : GridCell -> String
 primaryGridCellToString gridCell =
     case gridCell of
         Miss -> "!="
         Empty -> " "
-        Hit shipId -> "!"
-        Safe shipId -> toString shipId
+        Hit id -> "!"
+        Safe id -> toString id
 
 primaryGridToString : Grid -> String
 primaryGridToString grid =
@@ -363,7 +363,7 @@ trackingGridCellToString : GridCell -> String
 trackingGridCellToString gridCell =
     case gridCell of
         Miss -> "!="
-        Hit shipId -> "!"
+        Hit id -> "!"
         _ -> " "
 
 trackingGridToString : Grid -> String
@@ -382,7 +382,7 @@ isGameOver : Game -> (Bool, String)
 isGameOver theGame =
     let isNotSafeCell cell =
         case cell of
-            Safe shipId -> False
+            Safe id -> False
             _ -> True
     in
     let
@@ -419,7 +419,7 @@ addShip ship grid =
     if canAddShip ship grid then
         let newGrid =
             getShipCoordinates ship
-                |> List.foldr (\ coord accGrid -> M.set coord (Safe ship.shipId) accGrid) grid
+                |> List.foldr (\ coord accGrid -> M.set coord (Safe ship.id) accGrid) grid
         in (True, newGrid)
     else
         (False, grid)
@@ -429,7 +429,7 @@ guessShip loc opponentGrid =
     case M.get loc opponentGrid of
         Just v -> case v of
             Empty -> (True, M.set loc Miss opponentGrid)
-            Safe shipId -> (True, M.set loc (Hit shipId) opponentGrid)
+            Safe id -> (True, M.set loc (Hit id) opponentGrid)
             _ -> (False, opponentGrid)
         _ -> (False, opponentGrid)
 
@@ -495,22 +495,22 @@ setupControlsView address p =
                 if not s.isAdded then
                     Html.div []
                     [ Html.input -- Ship Row Input
-                        [ Html.Attributes.value (toString (M.row s.headCoord))
-                        , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipRow s.shipId)
+                        [ Html.Attributes.value (toString (M.row s.location))
+                        , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipRow s.id)
                         ]
                         []
                     , Html.input -- Ship Column Input
-                        [ Html.Attributes.value (toString (M.col s.headCoord))
-                        , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipColumn s.shipId)
+                        [ Html.Attributes.value (toString (M.col s.location))
+                        , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipColumn s.id)
                         ]
                         []
                     , Html.input -- Ship Orientation Input
                         [ Html.Attributes.value (orientationToString s.orientation)
-                        , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipOrientation s.shipId)
+                        , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipOrientation s.id)
                         ]
                         []
                     , Html.button -- Add Ship
-                        [ Html.Events.onClick address (AddShip s.shipId)
+                        [ Html.Events.onClick address (AddShip s.id)
                         ]
                         []
                     ]

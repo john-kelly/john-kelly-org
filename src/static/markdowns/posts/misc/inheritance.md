@@ -1,5 +1,8 @@
 # Javascript Inheritance === Code Resuse
 
+-- TODO post on js composition
+-- TODO post on composition vs inheritance
+
 #### Intro to Inheritance
 Classical vs Prototypal
 

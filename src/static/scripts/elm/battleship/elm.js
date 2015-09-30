@@ -405,14 +405,14 @@ Elm.Battleship.make = function (_elm) {
          {case "Horizontal":
             return $List.map(function (num) {
                  return A2($Matrix.location,
-                 $Matrix.row(ship.headCoord),
-                 $Matrix.col(ship.headCoord) + num);
+                 $Matrix.row(ship.location),
+                 $Matrix.col(ship.location) + num);
               })(_L.range(0,ship.length - 1));
             case "Vertical":
             return $List.map(function (num) {
                  return A2($Matrix.location,
-                 $Matrix.row(ship.headCoord) + num,
-                 $Matrix.col(ship.headCoord));
+                 $Matrix.row(ship.location) + num,
+                 $Matrix.col(ship.location));
               })(_L.range(0,
               ship.length - 1));}
          _U.badCase($moduleName,
@@ -507,21 +507,21 @@ Elm.Battleship.make = function (_elm) {
          return $Basics.not(s.isAdded) ? A2($Html.div,
          _L.fromArray([]),
          _L.fromArray([A2($Html.input,
-                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.row(s.headCoord)))
+                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.row(s.location)))
                                    ,A3($Html$Events.on,
                                    "input",
                                    $Html$Events.targetValue,
                                    function ($) {
-                                      return $Signal.message(address)(SetupShipRow(s.shipId)($));
+                                      return $Signal.message(address)(SetupShipRow(s.id)($));
                                    })]),
                       _L.fromArray([]))
                       ,A2($Html.input,
-                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.col(s.headCoord)))
+                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.col(s.location)))
                                    ,A3($Html$Events.on,
                                    "input",
                                    $Html$Events.targetValue,
                                    function ($) {
-                                      return $Signal.message(address)(SetupShipColumn(s.shipId)($));
+                                      return $Signal.message(address)(SetupShipColumn(s.id)($));
                                    })]),
                       _L.fromArray([]))
                       ,A2($Html.input,
@@ -530,13 +530,13 @@ Elm.Battleship.make = function (_elm) {
                                    "input",
                                    $Html$Events.targetValue,
                                    function ($) {
-                                      return $Signal.message(address)(SetupShipOrientation(s.shipId)($));
+                                      return $Signal.message(address)(SetupShipOrientation(s.id)($));
                                    })]),
                       _L.fromArray([]))
                       ,A2($Html.button,
                       _L.fromArray([A2($Html$Events.onClick,
                       address,
-                      AddShip(s.shipId))]),
+                      AddShip(s.id))]),
                       _L.fromArray([]))])) : A2($Html.div,
          _L.fromArray([]),
          _L.fromArray([]));
@@ -725,11 +725,11 @@ Elm.Battleship.make = function (_elm) {
    d,
    e) {
       return {_: {}
-             ,headCoord: d
+             ,id: a
              ,isAdded: e
              ,length: b
-             ,orientation: c
-             ,shipId: a};
+             ,location: d
+             ,orientation: c};
    });
    var NotSet = {ctor: "NotSet"};
    var canAddShip = F2(function (ship,
@@ -761,7 +761,7 @@ Elm.Battleship.make = function (_elm) {
          F2(function (coord,accGrid) {
             return A3($Matrix.set,
             coord,
-            Safe(ship.shipId),
+            Safe(ship.id),
             accGrid);
          }),
          grid)(getShipCoordinates(ship));
@@ -926,7 +926,7 @@ Elm.Battleship.make = function (_elm) {
                                                                    ,["ships"
                                                                     ,A2($List.map,
                                                                     function (aShip) {
-                                                                       return _U.eq(aShip.shipId,
+                                                                       return _U.eq(aShip.id,
                                                                        action._0) ? _U.replace([["isAdded"
                                                                                                 ,$Basics.fst(addShipResult)]],
                                                                        aShip) : aShip;
@@ -945,13 +945,13 @@ Elm.Battleship.make = function (_elm) {
                     return function () {
                          var player = model.player1;
                          var updateShip = function (s) {
-                            return _U.eq(s.shipId,
-                            action._0) ? _U.replace([["headCoord"
+                            return _U.eq(s.id,
+                            action._0) ? _U.replace([["location"
                                                      ,A2($Matrix.location,
-                                                     $Matrix.row(s.headCoord),
+                                                     $Matrix.row(s.location),
                                                      A2(toIntOrDefaultOrZero,
                                                      action._1,
-                                                     $Matrix.col(s.headCoord)))]],
+                                                     $Matrix.col(s.location)))]],
                             s) : s;
                          };
                          return _U.replace([["player1"
@@ -966,7 +966,7 @@ Elm.Battleship.make = function (_elm) {
                     return function () {
                          var player = model.player1;
                          var updateShip = function (s) {
-                            return _U.eq(s.shipId,
+                            return _U.eq(s.id,
                             action._0) ? _U.replace([["orientation"
                                                      ,A2(orientationFromStringOrDefault,
                                                      action._1,
@@ -985,13 +985,13 @@ Elm.Battleship.make = function (_elm) {
                     return function () {
                          var player = model.player1;
                          var updateShip = function (s) {
-                            return _U.eq(s.shipId,
-                            action._0) ? _U.replace([["headCoord"
+                            return _U.eq(s.id,
+                            action._0) ? _U.replace([["location"
                                                      ,A2($Matrix.location,
                                                      A2(toIntOrDefaultOrZero,
                                                      action._1,
-                                                     $Matrix.row(s.headCoord)),
-                                                     $Matrix.col(s.headCoord))]],
+                                                     $Matrix.row(s.location)),
+                                                     $Matrix.col(s.location))]],
                             s) : s;
                          };
                          return _U.replace([["player1"
@@ -1028,7 +1028,7 @@ Elm.Battleship.make = function (_elm) {
                                                                    ,["ships"
                                                                     ,A2($List.map,
                                                                     function (aShip) {
-                                                                       return _U.eq(aShip.shipId,
+                                                                       return _U.eq(aShip.id,
                                                                        action._0) ? _U.replace([["isAdded"
                                                                                                 ,$Basics.fst(addShipResult)]],
                                                                        aShip) : aShip;
@@ -1047,13 +1047,13 @@ Elm.Battleship.make = function (_elm) {
                     return function () {
                          var player = model.player2;
                          var updateShip = function (s) {
-                            return _U.eq(s.shipId,
-                            action._0) ? _U.replace([["headCoord"
+                            return _U.eq(s.id,
+                            action._0) ? _U.replace([["location"
                                                      ,A2($Matrix.location,
-                                                     $Matrix.row(s.headCoord),
+                                                     $Matrix.row(s.location),
                                                      A2(toIntOrDefaultOrZero,
                                                      action._1,
-                                                     $Matrix.col(s.headCoord)))]],
+                                                     $Matrix.col(s.location)))]],
                             s) : s;
                          };
                          return _U.replace([["player2"
@@ -1068,7 +1068,7 @@ Elm.Battleship.make = function (_elm) {
                     return function () {
                          var player = model.player2;
                          var updateShip = function (s) {
-                            return _U.eq(s.shipId,
+                            return _U.eq(s.id,
                             action._0) ? _U.replace([["orientation"
                                                      ,A2(orientationFromStringOrDefault,
                                                      action._1,
@@ -1087,13 +1087,13 @@ Elm.Battleship.make = function (_elm) {
                     return function () {
                          var player = model.player2;
                          var updateShip = function (s) {
-                            return _U.eq(s.shipId,
-                            action._0) ? _U.replace([["headCoord"
+                            return _U.eq(s.id,
+                            action._0) ? _U.replace([["location"
                                                      ,A2($Matrix.location,
                                                      A2(toIntOrDefaultOrZero,
                                                      action._1,
-                                                     $Matrix.row(s.headCoord)),
-                                                     $Matrix.col(s.headCoord))]],
+                                                     $Matrix.row(s.location)),
+                                                     $Matrix.col(s.location))]],
                             s) : s;
                          };
                          return _U.replace([["player2"
