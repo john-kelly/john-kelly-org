@@ -30,7 +30,7 @@ import Signal
 
 ---- MODEL ----
 -- Ship --
-type Orientation = Horizontal | Vertical | NotSet
+type Orientation = Horizontal | Vertical
 type alias Ship =
     { id : Int
     , length : Int
@@ -103,7 +103,8 @@ type Action
     = NoOp
     | SetupShipRow Int String
     | SetupShipColumn Int String
-    | SetupShipOrientation Int String
+    -- TODO Convert this to a single radio button. That way we can get rid of the the need to pass Orientation.
+    | SetupShipOrientation Orientation Int Bool
     | AddShip Int
     | SetupShootRow String
     | SetupShootColumn String
@@ -148,15 +149,9 @@ update action model =
                             List.map updateShip model.player1.ships
                         }
                     }
-                SetupShipOrientation id orientAsString ->
+                SetupShipOrientation orientation id isChecked ->
                     let
-                    updateShip s =
-                        if s.id == id then
-                            {
-                             s | orientation <- orientationFromStringOrDefault orientAsString s.orientation
-                            }
-
-                        else s
+                    updateShip s = if s.id == id then { s | orientation <- orientation } else s
                     player = model.player1
                     in
                     { model | player1 <-
@@ -221,15 +216,9 @@ update action model =
                             List.map updateShip model.player2.ships
                         }
                     }
-                SetupShipOrientation id orientAsString ->
+                SetupShipOrientation orientation id isChecked ->
                     let
-                    updateShip s =
-                        if s.id == id then
-                            {
-                             s | orientation <- orientationFromStringOrDefault orientAsString s.orientation
-                            }
-
-                        else s
+                    updateShip s = if s.id == id then { s | orientation <- orientation } else s
                     player = model.player2
                     in
                     { model | player2 <-
@@ -321,22 +310,6 @@ toIntOrDefaultOrZero stringToConvert default =
         Ok n -> n
         _ -> default
 
-orientationToString : Orientation -> String
-orientationToString o =
-    case o of
-        Vertical ->
-            "V"
-        Horizontal ->
-            "H"
-        NotSet ->
-            ""
-orientationFromStringOrDefault : String -> Orientation -> Orientation
-orientationFromStringOrDefault s default =
-    if  | s == "V" -> Vertical
-        | s == "H" -> Horizontal
-        | s == "" -> NotSet
-        | otherwise -> default
-
 getShipCoordinates : Ship -> List M.Location
 getShipCoordinates ship =
     case ship.orientation of
@@ -403,8 +376,6 @@ isGameOver theGame =
 
 canAddShip : Ship -> Grid -> Bool
 canAddShip ship grid =
-    (ship.orientation /= NotSet)
-    &&
     (getShipCoordinates ship
         |> List.map (\ coord -> M.get coord grid)
         |> List.foldr (\ v acc ->
@@ -504,9 +475,16 @@ setupControlsView address p =
                         , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipColumn s.id)
                         ]
                         []
-                    , Html.input -- Ship Orientation Input
-                        [ Html.Attributes.value (orientationToString s.orientation)
-                        , Html.Events.on "input" Html.Events.targetValue (Signal.message address << SetupShipOrientation s.id)
+                    , Html.input -- Ship Orientation Vertical
+                        [ Html.Attributes.type' "radio"
+                        , Html.Attributes.checked (s.orientation == Vertical)
+                        , Html.Events.on "change" Html.Events.targetChecked (Signal.message address << SetupShipOrientation Vertical s.id)
+                        ]
+                        []
+                    , Html.input -- Ship Orientation Horizontal
+                        [ Html.Attributes.type' "radio"
+                        , Html.Attributes.checked (s.orientation == Horizontal)
+                        , Html.Events.on "change" Html.Events.targetChecked (Signal.message address << SetupShipOrientation Horizontal s.id)
                         ]
                         []
                     , Html.button -- Add Ship

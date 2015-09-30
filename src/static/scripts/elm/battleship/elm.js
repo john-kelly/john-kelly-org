@@ -355,7 +355,7 @@ Elm.Battleship.make = function (_elm) {
             case "Safe":
             return $Basics.toString(gridCell._0);}
          _U.badCase($moduleName,
-         "between lines 352 and 356");
+         "between lines 324 and 328");
       }();
    };
    var primaryGridToString = function (grid) {
@@ -394,7 +394,7 @@ Elm.Battleship.make = function (_elm) {
                               _L.fromArray([]),
                               _L.fromArray([$Html.text(trackingGridToString(player.grid))]))]));}
             _U.badCase($moduleName,
-            "between lines 478 and 488");
+            "between lines 448 and 458");
          }();
       }();
    });
@@ -416,26 +416,35 @@ Elm.Battleship.make = function (_elm) {
               })(_L.range(0,
               ship.length - 1));}
          _U.badCase($moduleName,
-         "between lines 342 and 348");
+         "between lines 314 and 320");
       }();
    };
-   var orientationToString = function (o) {
-      return function () {
-         switch (o.ctor)
-         {case "Horizontal": return "H";
-            case "NotSet": return "";
-            case "Vertical": return "V";}
-         _U.badCase($moduleName,
-         "between lines 326 and 332");
-      }();
-   };
+   var canAddShip = F2(function (ship,
+   grid) {
+      return A2($List.foldr,
+      F2(function (v,acc) {
+         return function () {
+            switch (v.ctor)
+            {case "Just": switch (v._0.ctor)
+                 {case "Empty":
+                    return true && acc;}
+                 break;}
+            return false;
+         }();
+      }),
+      true)($List.map(function (coord) {
+         return A2($Matrix.get,
+         coord,
+         grid);
+      })(getShipCoordinates(ship)));
+   });
    var toIntOrDefaultOrZero = F2(function (stringToConvert,
    $default) {
       return _U.eq(stringToConvert,
       "") ? 0 : function () {
-         var _v12 = $String.toInt(stringToConvert);
-         switch (_v12.ctor)
-         {case "Ok": return _v12._0;}
+         var _v13 = $String.toInt(stringToConvert);
+         switch (_v13.ctor)
+         {case "Ok": return _v13._0;}
          return $default;
       }();
    });
@@ -481,11 +490,13 @@ Elm.Battleship.make = function (_elm) {
       return {ctor: "AddShip"
              ,_0: a};
    };
-   var SetupShipOrientation = F2(function (a,
-   b) {
+   var SetupShipOrientation = F3(function (a,
+   b,
+   c) {
       return {ctor: "SetupShipOrientation"
              ,_0: a
-             ,_1: b};
+             ,_1: b
+             ,_2: c};
    });
    var SetupShipColumn = F2(function (a,
    b) {
@@ -498,78 +509,6 @@ Elm.Battleship.make = function (_elm) {
       return {ctor: "SetupShipRow"
              ,_0: a
              ,_1: b};
-   });
-   var setupControlsView = F2(function (address,
-   p) {
-      return A2($Html.div,
-      _L.fromArray([]),
-      $List.map(function (s) {
-         return $Basics.not(s.isAdded) ? A2($Html.div,
-         _L.fromArray([]),
-         _L.fromArray([A2($Html.input,
-                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.row(s.location)))
-                                   ,A3($Html$Events.on,
-                                   "input",
-                                   $Html$Events.targetValue,
-                                   function ($) {
-                                      return $Signal.message(address)(SetupShipRow(s.id)($));
-                                   })]),
-                      _L.fromArray([]))
-                      ,A2($Html.input,
-                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.col(s.location)))
-                                   ,A3($Html$Events.on,
-                                   "input",
-                                   $Html$Events.targetValue,
-                                   function ($) {
-                                      return $Signal.message(address)(SetupShipColumn(s.id)($));
-                                   })]),
-                      _L.fromArray([]))
-                      ,A2($Html.input,
-                      _L.fromArray([$Html$Attributes.value(orientationToString(s.orientation))
-                                   ,A3($Html$Events.on,
-                                   "input",
-                                   $Html$Events.targetValue,
-                                   function ($) {
-                                      return $Signal.message(address)(SetupShipOrientation(s.id)($));
-                                   })]),
-                      _L.fromArray([]))
-                      ,A2($Html.button,
-                      _L.fromArray([A2($Html$Events.onClick,
-                      address,
-                      AddShip(s.id))]),
-                      _L.fromArray([]))])) : A2($Html.div,
-         _L.fromArray([]),
-         _L.fromArray([]));
-      })(p.ships));
-   });
-   var controlsView = F3(function (address,
-   p,
-   theGame) {
-      return function () {
-         var _v14 = theGame.state;
-         switch (_v14.ctor)
-         {case "PlayPlayer1":
-            return A3(playControlsView,
-              address,
-              p,
-              theGame);
-            case "PlayPlayer2":
-            return A3(playControlsView,
-              address,
-              p,
-              theGame);
-            case "SetupPlayer1":
-            return A2(setupControlsView,
-              address,
-              p);
-            case "SetupPlayer2":
-            return A2(setupControlsView,
-              address,
-              p);}
-         return A2($Html.div,
-         _L.fromArray([]),
-         _L.fromArray([]));
-      }();
    });
    var NoOp = {ctor: "NoOp"};
    var actions = $Signal.mailbox(NoOp);
@@ -600,158 +539,9 @@ Elm.Battleship.make = function (_elm) {
    });
    var PrimaryGrid = {ctor: "PrimaryGrid"};
    var TrackingGrid = {ctor: "TrackingGrid"};
-   var view = F2(function (address,
-   model) {
-      return function () {
-         var _v15 = model.state;
-         switch (_v15.ctor)
-         {case "GameOver":
-            return A2($Html.div,
-              _L.fromArray([]),
-              _L.fromArray([$Html.text(_v15._0)]));
-            case "PlayPlayer1":
-            return A2($Html.div,
-              _L.fromArray([]),
-              _L.fromArray([A2($Html.div,
-                           _L.fromArray([]),
-                           _L.fromArray([$Html.text("Player 1 Turn")]))
-                           ,A2(gridView,
-                           model.player1,
-                           PrimaryGrid)
-                           ,A2(gridView,
-                           model.player2,
-                           TrackingGrid)
-                           ,A3(controlsView,
-                           address,
-                           model.player1,
-                           model)]));
-            case "PlayPlayer2":
-            return A2($Html.div,
-              _L.fromArray([]),
-              _L.fromArray([A2($Html.div,
-                           _L.fromArray([]),
-                           _L.fromArray([$Html.text("Player 2 Turn")]))
-                           ,A2(gridView,
-                           model.player2,
-                           PrimaryGrid)
-                           ,A2(gridView,
-                           model.player1,
-                           TrackingGrid)
-                           ,A3(controlsView,
-                           address,
-                           model.player2,
-                           model)]));
-            case "SetupPlayer1":
-            return A2($Html.div,
-              _L.fromArray([]),
-              _L.fromArray([A2($Html.div,
-                           _L.fromArray([]),
-                           _L.fromArray([$Html.text("Player 1 Turn")]))
-                           ,A2(gridView,
-                           model.player1,
-                           PrimaryGrid)
-                           ,A3(controlsView,
-                           address,
-                           model.player1,
-                           model)]));
-            case "SetupPlayer2":
-            return A2($Html.div,
-              _L.fromArray([]),
-              _L.fromArray([A2($Html.div,
-                           _L.fromArray([]),
-                           _L.fromArray([$Html.text("Player 2 Turn")]))
-                           ,A2(gridView,
-                           model.player2,
-                           PrimaryGrid)
-                           ,A3(controlsView,
-                           address,
-                           model.player2,
-                           model)]));}
-         _U.badCase($moduleName,
-         "between lines 439 and 467");
-      }();
-   });
    var Safe = function (a) {
       return {ctor: "Safe",_0: a};
    };
-   var Hit = function (a) {
-      return {ctor: "Hit",_0: a};
-   };
-   var Empty = {ctor: "Empty"};
-   var grid = F2(function (numRows,
-   numCols) {
-      return A3($Matrix.initialize,
-      numRows,
-      numCols,
-      Empty);
-   });
-   var Miss = {ctor: "Miss"};
-   var guessShip = F2(function (loc,
-   opponentGrid) {
-      return function () {
-         var _v17 = A2($Matrix.get,
-         loc,
-         opponentGrid);
-         switch (_v17.ctor)
-         {case "Just":
-            return function () {
-                 switch (_v17._0.ctor)
-                 {case "Empty":
-                    return {ctor: "_Tuple2"
-                           ,_0: true
-                           ,_1: A3($Matrix.set,
-                           loc,
-                           Miss,
-                           opponentGrid)};
-                    case "Safe":
-                    return {ctor: "_Tuple2"
-                           ,_0: true
-                           ,_1: A3($Matrix.set,
-                           loc,
-                           Hit(_v17._0._0),
-                           opponentGrid)};}
-                 return {ctor: "_Tuple2"
-                        ,_0: false
-                        ,_1: opponentGrid};
-              }();}
-         return {ctor: "_Tuple2"
-                ,_0: false
-                ,_1: opponentGrid};
-      }();
-   });
-   var Ship = F5(function (a,
-   b,
-   c,
-   d,
-   e) {
-      return {_: {}
-             ,id: a
-             ,isAdded: e
-             ,length: b
-             ,location: d
-             ,orientation: c};
-   });
-   var NotSet = {ctor: "NotSet"};
-   var canAddShip = F2(function (ship,
-   grid) {
-      return !_U.eq(ship.orientation,
-      NotSet) && A2($List.foldr,
-      F2(function (v,acc) {
-         return function () {
-            switch (v.ctor)
-            {case "Just": switch (v._0.ctor)
-                 {case "Empty":
-                    return true && acc;}
-                 break;}
-            return false;
-         }();
-      }),
-      true)($List.map(function (coord) {
-         return A2($Matrix.get,
-         coord,
-         grid);
-      })(getShipCoordinates(ship)));
-   });
    var addShip = F2(function (ship,
    grid) {
       return A2(canAddShip,
@@ -772,60 +562,56 @@ Elm.Battleship.make = function (_elm) {
             ,_0: false
             ,_1: grid};
    });
-   var Vertical = {ctor: "Vertical"};
-   var Horizontal = {ctor: "Horizontal"};
-   var defaultShips = _L.fromArray([A5(Ship,
-                                   0,
-                                   2,
-                                   Horizontal,
-                                   A2($Matrix.location,0,0),
-                                   false)
-                                   ,A5(Ship,
-                                   1,
-                                   3,
-                                   Horizontal,
-                                   A2($Matrix.location,0,0),
-                                   false)
-                                   ,A5(Ship,
-                                   2,
-                                   4,
-                                   Horizontal,
-                                   A2($Matrix.location,0,0),
-                                   false)]);
-   var player = F2(function (numRows,
+   var Hit = function (a) {
+      return {ctor: "Hit",_0: a};
+   };
+   var Empty = {ctor: "Empty"};
+   var grid = F2(function (numRows,
    numCols) {
-      return {_: {}
-             ,grid: A2(grid,numRows,numCols)
-             ,ships: defaultShips};
+      return A3($Matrix.initialize,
+      numRows,
+      numCols,
+      Empty);
    });
-   var game = F2(function (numRows,
-   numCols) {
-      return {_: {}
-             ,player1: A2(player,
-             numRows,
-             numCols)
-             ,player2: A2(player,
-             numRows,
-             numCols)
-             ,shootColumn: 0
-             ,shootRow: 0
-             ,state: SetupPlayer1};
-   });
-   var initialModel = A2(game,
-   10,
-   10);
-   var orientationFromStringOrDefault = F2(function (s,
-   $default) {
-      return _U.eq(s,
-      "V") ? Vertical : _U.eq(s,
-      "H") ? Horizontal : _U.eq(s,
-      "") ? NotSet : $default;
+   var Miss = {ctor: "Miss"};
+   var guessShip = F2(function (loc,
+   opponentGrid) {
+      return function () {
+         var _v15 = A2($Matrix.get,
+         loc,
+         opponentGrid);
+         switch (_v15.ctor)
+         {case "Just":
+            return function () {
+                 switch (_v15._0.ctor)
+                 {case "Empty":
+                    return {ctor: "_Tuple2"
+                           ,_0: true
+                           ,_1: A3($Matrix.set,
+                           loc,
+                           Miss,
+                           opponentGrid)};
+                    case "Safe":
+                    return {ctor: "_Tuple2"
+                           ,_0: true
+                           ,_1: A3($Matrix.set,
+                           loc,
+                           Hit(_v15._0._0),
+                           opponentGrid)};}
+                 return {ctor: "_Tuple2"
+                        ,_0: false
+                        ,_1: opponentGrid};
+              }();}
+         return {ctor: "_Tuple2"
+                ,_0: false
+                ,_1: opponentGrid};
+      }();
    });
    var update = F2(function (action,
    model) {
       return function () {
-         var _v23 = model.state;
-         switch (_v23.ctor)
+         var _v19 = model.state;
+         switch (_v19.ctor)
          {case "GameOver": return model;
             case "PlayPlayer1":
             return function () {
@@ -967,10 +753,8 @@ Elm.Battleship.make = function (_elm) {
                          var player = model.player1;
                          var updateShip = function (s) {
                             return _U.eq(s.id,
-                            action._0) ? _U.replace([["orientation"
-                                                     ,A2(orientationFromStringOrDefault,
-                                                     action._1,
-                                                     s.orientation)]],
+                            action._1) ? _U.replace([["orientation"
+                                                     ,action._0]],
                             s) : s;
                          };
                          return _U.replace([["player1"
@@ -1003,7 +787,7 @@ Elm.Battleship.make = function (_elm) {
                          model);
                       }();}
                  _U.badCase($moduleName,
-                 "between lines 117 and 189");
+                 "between lines 117 and 183");
               }();
             case "SetupPlayer2":
             return function () {
@@ -1069,10 +853,8 @@ Elm.Battleship.make = function (_elm) {
                          var player = model.player2;
                          var updateShip = function (s) {
                             return _U.eq(s.id,
-                            action._0) ? _U.replace([["orientation"
-                                                     ,A2(orientationFromStringOrDefault,
-                                                     action._1,
-                                                     s.orientation)]],
+                            action._1) ? _U.replace([["orientation"
+                                                     ,action._0]],
                             s) : s;
                          };
                          return _U.replace([["player2"
@@ -1105,24 +887,237 @@ Elm.Battleship.make = function (_elm) {
                          model);
                       }();}
                  _U.badCase($moduleName,
-                 "between lines 190 and 262");
+                 "between lines 184 and 250");
               }();}
          return function () {
             return model;
          }();
       }();
    });
+   var Ship = F5(function (a,
+   b,
+   c,
+   d,
+   e) {
+      return {_: {}
+             ,id: a
+             ,isAdded: e
+             ,length: b
+             ,location: d
+             ,orientation: c};
+   });
+   var Vertical = {ctor: "Vertical"};
+   var Horizontal = {ctor: "Horizontal"};
+   var defaultShips = _L.fromArray([A5(Ship,
+                                   0,
+                                   2,
+                                   Horizontal,
+                                   A2($Matrix.location,0,0),
+                                   false)
+                                   ,A5(Ship,
+                                   1,
+                                   3,
+                                   Horizontal,
+                                   A2($Matrix.location,0,0),
+                                   false)
+                                   ,A5(Ship,
+                                   2,
+                                   4,
+                                   Horizontal,
+                                   A2($Matrix.location,0,0),
+                                   false)]);
+   var player = F2(function (numRows,
+   numCols) {
+      return {_: {}
+             ,grid: A2(grid,numRows,numCols)
+             ,ships: defaultShips};
+   });
+   var game = F2(function (numRows,
+   numCols) {
+      return {_: {}
+             ,player1: A2(player,
+             numRows,
+             numCols)
+             ,player2: A2(player,
+             numRows,
+             numCols)
+             ,shootColumn: 0
+             ,shootRow: 0
+             ,state: SetupPlayer1};
+   });
+   var initialModel = A2(game,
+   10,
+   10);
    var model = A3($Signal.foldp,
    update,
    initialModel,
    actions.signal);
+   var setupControlsView = F2(function (address,
+   p) {
+      return A2($Html.div,
+      _L.fromArray([]),
+      $List.map(function (s) {
+         return $Basics.not(s.isAdded) ? A2($Html.div,
+         _L.fromArray([]),
+         _L.fromArray([A2($Html.input,
+                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.row(s.location)))
+                                   ,A3($Html$Events.on,
+                                   "input",
+                                   $Html$Events.targetValue,
+                                   function ($) {
+                                      return $Signal.message(address)(SetupShipRow(s.id)($));
+                                   })]),
+                      _L.fromArray([]))
+                      ,A2($Html.input,
+                      _L.fromArray([$Html$Attributes.value($Basics.toString($Matrix.col(s.location)))
+                                   ,A3($Html$Events.on,
+                                   "input",
+                                   $Html$Events.targetValue,
+                                   function ($) {
+                                      return $Signal.message(address)(SetupShipColumn(s.id)($));
+                                   })]),
+                      _L.fromArray([]))
+                      ,A2($Html.input,
+                      _L.fromArray([$Html$Attributes.type$("radio")
+                                   ,$Html$Attributes.checked(_U.eq(s.orientation,
+                                   Vertical))
+                                   ,A3($Html$Events.on,
+                                   "change",
+                                   $Html$Events.targetChecked,
+                                   function ($) {
+                                      return $Signal.message(address)(A2(SetupShipOrientation,
+                                      Vertical,
+                                      s.id)($));
+                                   })]),
+                      _L.fromArray([]))
+                      ,A2($Html.input,
+                      _L.fromArray([$Html$Attributes.type$("radio")
+                                   ,$Html$Attributes.checked(_U.eq(s.orientation,
+                                   Horizontal))
+                                   ,A3($Html$Events.on,
+                                   "change",
+                                   $Html$Events.targetChecked,
+                                   function ($) {
+                                      return $Signal.message(address)(A2(SetupShipOrientation,
+                                      Horizontal,
+                                      s.id)($));
+                                   })]),
+                      _L.fromArray([]))
+                      ,A2($Html.button,
+                      _L.fromArray([A2($Html$Events.onClick,
+                      address,
+                      AddShip(s.id))]),
+                      _L.fromArray([]))])) : A2($Html.div,
+         _L.fromArray([]),
+         _L.fromArray([]));
+      })(p.ships));
+   });
+   var controlsView = F3(function (address,
+   p,
+   theGame) {
+      return function () {
+         var _v50 = theGame.state;
+         switch (_v50.ctor)
+         {case "PlayPlayer1":
+            return A3(playControlsView,
+              address,
+              p,
+              theGame);
+            case "PlayPlayer2":
+            return A3(playControlsView,
+              address,
+              p,
+              theGame);
+            case "SetupPlayer1":
+            return A2(setupControlsView,
+              address,
+              p);
+            case "SetupPlayer2":
+            return A2(setupControlsView,
+              address,
+              p);}
+         return A2($Html.div,
+         _L.fromArray([]),
+         _L.fromArray([]));
+      }();
+   });
+   var view = F2(function (address,
+   model) {
+      return function () {
+         var _v51 = model.state;
+         switch (_v51.ctor)
+         {case "GameOver":
+            return A2($Html.div,
+              _L.fromArray([]),
+              _L.fromArray([$Html.text(_v51._0)]));
+            case "PlayPlayer1":
+            return A2($Html.div,
+              _L.fromArray([]),
+              _L.fromArray([A2($Html.div,
+                           _L.fromArray([]),
+                           _L.fromArray([$Html.text("Player 1 Turn")]))
+                           ,A2(gridView,
+                           model.player1,
+                           PrimaryGrid)
+                           ,A2(gridView,
+                           model.player2,
+                           TrackingGrid)
+                           ,A3(controlsView,
+                           address,
+                           model.player1,
+                           model)]));
+            case "PlayPlayer2":
+            return A2($Html.div,
+              _L.fromArray([]),
+              _L.fromArray([A2($Html.div,
+                           _L.fromArray([]),
+                           _L.fromArray([$Html.text("Player 2 Turn")]))
+                           ,A2(gridView,
+                           model.player2,
+                           PrimaryGrid)
+                           ,A2(gridView,
+                           model.player1,
+                           TrackingGrid)
+                           ,A3(controlsView,
+                           address,
+                           model.player2,
+                           model)]));
+            case "SetupPlayer1":
+            return A2($Html.div,
+              _L.fromArray([]),
+              _L.fromArray([A2($Html.div,
+                           _L.fromArray([]),
+                           _L.fromArray([$Html.text("Player 1 Turn")]))
+                           ,A2(gridView,
+                           model.player1,
+                           PrimaryGrid)
+                           ,A3(controlsView,
+                           address,
+                           model.player1,
+                           model)]));
+            case "SetupPlayer2":
+            return A2($Html.div,
+              _L.fromArray([]),
+              _L.fromArray([A2($Html.div,
+                           _L.fromArray([]),
+                           _L.fromArray([$Html.text("Player 2 Turn")]))
+                           ,A2(gridView,
+                           model.player2,
+                           PrimaryGrid)
+                           ,A3(controlsView,
+                           address,
+                           model.player2,
+                           model)]));}
+         _U.badCase($moduleName,
+         "between lines 409 and 437");
+      }();
+   });
    var main = A2($Signal.map,
    view(actions.address),
    model);
    _elm.Battleship.values = {_op: _op
                             ,Horizontal: Horizontal
                             ,Vertical: Vertical
-                            ,NotSet: NotSet
                             ,Ship: Ship
                             ,defaultShips: defaultShips
                             ,Miss: Miss
@@ -1151,8 +1146,6 @@ Elm.Battleship.make = function (_elm) {
                             ,Shoot: Shoot
                             ,update: update
                             ,toIntOrDefaultOrZero: toIntOrDefaultOrZero
-                            ,orientationToString: orientationToString
-                            ,orientationFromStringOrDefault: orientationFromStringOrDefault
                             ,getShipCoordinates: getShipCoordinates
                             ,primaryGridCellToString: primaryGridCellToString
                             ,primaryGridToString: primaryGridToString
