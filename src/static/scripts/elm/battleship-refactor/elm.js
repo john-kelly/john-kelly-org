@@ -311,7 +311,7 @@ Elm.Battleship.make = function (_elm) {
               })(_L.range(0,
               ship.length - 1));}
          _U.badCase($moduleName,
-         "between lines 223 and 229");
+         "between lines 229 and 235");
       }();
    };
    var shipInBounds = F2(function (ship,
@@ -329,7 +329,7 @@ Elm.Battleship.make = function (_elm) {
                     0) > -1 && _U.cmp(_v1._1,
                     gridW) < 0));}
                _U.badCase($moduleName,
-               "on line 214, column 9 to 81");
+               "on line 220, column 9 to 81");
             }();
          };
          return $List.all($Basics.identity)($List.map(isInBounds)(getShipCoordinates(ship)));
@@ -621,7 +621,7 @@ Elm.Battleship.make = function (_elm) {
                  model);
               }();}
          _U.badCase($moduleName,
-         "between lines 142 and 169");
+         "between lines 143 and 175");
       }();
    });
    var defaultComputer = {_: {}

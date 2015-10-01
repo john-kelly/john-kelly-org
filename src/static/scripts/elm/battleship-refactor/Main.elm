@@ -28,7 +28,7 @@ defaultModel =
 type alias Model =
     { state : State
     , player : Player
-    , computer : Player
+    , computer : Player -- Should this be a maybe?
     }
 -- State
 type State
@@ -132,11 +132,12 @@ shipFieldView address shipId theShip =
 
 ---- UPDATE ----
 type Action
-    = SetupOrientationField Int
-    | SetupRowField Int String
-    | SetupColumnField Int String
-    | SetupAddShip Int
+    = SetupOrientationField ShipId
+    | SetupRowField ShipId String
+    | SetupColumnField ShipId String
+    | SetupAddShip ShipId
     | PlayShoot
+type alias ShipId = Int
 update : Action -> Model -> Model
 update action model =
     case action of
@@ -184,7 +185,7 @@ toIntOrDefaultOrZero stringToConvert default =
         Ok n -> n
         _ -> default
 
-addShip : Int -> Player -> Player
+addShip : ShipId -> Player -> Player
 addShip shipId thePlayer =
     let
     updateShip maybeShip = maybeShip
